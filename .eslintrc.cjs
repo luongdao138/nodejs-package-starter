@@ -8,7 +8,6 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:prettier/recommended',
     'plugin:promise/recommended',
     'prettier',
@@ -23,11 +22,14 @@ module.exports = {
   },
   root: true,
   rules: {
+    '@typescript-eslint/interface-name-prefix': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
     'prettier/prettier': ['error', { semi: false }],
-    'no-console': 'error',
     'simple-import-sort/exports': 'error',
     'simple-import-sort/imports': 'error',
-    '@typescript-eslint/no-explicit-any': 'off',
+    'no-console': 'error',
   },
   ignorePatterns: ['.eslintrc.cjs'],
   settings: {
