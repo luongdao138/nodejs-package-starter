@@ -1,0 +1,14 @@
+**/node_modules/*
+**/out/*
+**/.next/*
+**/.vscode/*
+**/.idea/*
+**/.idea/*
+**/.vscode/*
+**/dist/*
+**/docker_data/*
+**/coverage/*
+*.env
+*.env.*
+*.js
+*.cjs
