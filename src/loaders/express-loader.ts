@@ -1,4 +1,5 @@
 import express, { Express } from 'express'
+import helmet from 'helmet'
 import morgan from 'morgan'
 
 import logger from '../cli/reporter'
@@ -12,6 +13,7 @@ type Options = {
 export default async function ({ app }: Options) {
   app.set('trust proxy', 1)
   app.use(express.json())
+  app.use(helmet())
   app.use(morgan('combined', { stream: logger.loggerInstance_.stream, skip: () => process.env.NODE_ENV === 'test' }))
 
   app.get('/health', (req, res) => {

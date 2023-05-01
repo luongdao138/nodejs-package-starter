@@ -47,7 +47,6 @@ loggerInstance.stream = {
   },
 }
 
-
 export class Reporter {
   public loggerInstance_: winston.Logger
   activities_: any[]
