@@ -31,8 +31,9 @@ export default async function ({ container }: Options, config = { register: true
 
   const modules: LoadedModule[] = []
 
-  core.forEach(async (modulePath) => {
-    const loaded = (await import(modulePath)) as LoadedModule
+  core.forEach((modulePath) => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const loaded = require(modulePath) as LoadedModule
 
     if (loaded) {
       Object.entries(loaded).map(([, val]: [string, LoadedModule]) => {
