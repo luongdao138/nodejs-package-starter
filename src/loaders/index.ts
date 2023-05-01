@@ -1,3 +1,5 @@
+import 'reflect-metadata'
+
 import { asValue } from 'awilix'
 import { track } from 'medusa-telemetry'
 import { EOL } from 'os'

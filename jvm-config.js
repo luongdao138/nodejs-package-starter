@@ -6,5 +6,6 @@ module.exports = {
     database_type: 'postgres',
     front_cors: 'front-cors',
     admin_cors: 'admin-cors',
+    redis_url: 'redis://localhost:6379'
   },
 }

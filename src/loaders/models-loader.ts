@@ -26,9 +26,6 @@ export default async function ({ container }: Options, config = { register: true
     ignore: ['index.js', 'index.ts'],
   })
 
-  // eslint-disable-next-line no-console
-  console.log({ core })
-
   const modules: LoadedModule[] = []
 
   core.forEach(async (modulePath) => {
