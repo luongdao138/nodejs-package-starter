@@ -9,7 +9,7 @@ export * from './types'
 export * from './utils'
 
 const testLoader = async () => {
-  dotenv.config()
+  dotenv.config({ allowEmptyValues: true })
   const app = express()
 
   process.env.TEST_LOADER &&

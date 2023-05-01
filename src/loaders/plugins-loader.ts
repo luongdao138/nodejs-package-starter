@@ -56,7 +56,7 @@ export async function registerPluginModels({ container, rootDirectory }: Options
 }
 
 export async function registerModels(pluginDetail: PluginDetails, container: AppContainer) {
-  const files = glob.sync(`${pluginDetail}/model/*.js`, {})
+  const files = glob.sync(`${pluginDetail.resolve}/models/*.js`, {})
 
   await Promise.all(
     files.map(async (file) => {
