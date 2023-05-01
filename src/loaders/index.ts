@@ -6,6 +6,7 @@ import { LoaderConfig, LoaderResult } from '../types/globals'
 import { createAppContainer } from '../utils'
 import loadConfig from './config'
 import expressLoader from './express-loader'
+import redisLoader from './redis-loader'
 import loadRequestContext from './request-context'
 
 const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<LoaderResult> => {
@@ -28,6 +29,10 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
   container.register({
     logger: asValue(logger),
   })
+
+  // register redis database
+  redisLoader({ container, configModule, logger: logger as any })
+  track('Redis DB inited')
 
   // load basic epxress app config
   expressLoader({ app: expressApp })

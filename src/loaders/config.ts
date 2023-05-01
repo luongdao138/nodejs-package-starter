@@ -21,6 +21,12 @@ export default function (rootDirectory: string): ConfigModule {
 
   logger.info(`Loaded config module with path: ${configFilePath}`)
 
+  if (!configModule?.projectConfig?.redis_url) {
+    logger.error(`
+       [jwm-config] ⚠️ redis_url not found. A fake redis instance will be used.
+     `)
+  }
+
   return {
     projectConfig: {
       ...configModule.projectConfig,
