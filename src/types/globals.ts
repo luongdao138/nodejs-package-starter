@@ -43,6 +43,7 @@ export type ConfigModule = {
     }
     front_cors?: string
     admin_cors?: string
+    port?: number
   }
   //   featureFlags: Record<string, boolean | string>
   //   modules?: Record<string, false | string | Partial<InternalModuleDeclaration | ExternalModuleDeclaration>>
