@@ -17,7 +17,8 @@
     "allowJs": true,
     "skipLibCheck": true,
     "downlevelIteration": true, // to use ES5 specific tooling
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "removeComments": true
   },
   "include": ["./src/**/*"],
   "exclude": ["./dist/**/*", "./src/**/__tests__", "./src/**/__mocks__", "./src/**/__fixtures__", "node_modules"]
