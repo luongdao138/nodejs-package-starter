@@ -31,11 +31,11 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
   })
 
   // register redis database
-  redisLoader({ container, configModule, logger: logger as any })
+  await redisLoader({ container, configModule, logger: logger as any })
   track('Redis DB inited')
 
   // load basic epxress app config
-  expressLoader({ app: expressApp })
+  await expressLoader({ app: expressApp })
 
   return { app: expressApp, container }
 }
