@@ -1,5 +1,18 @@
+/* eslint-disable @typescript-eslint/no-namespace */
+
 import { Express } from 'express'
 import { LoggerOptions } from 'typeorm'
+
+import { AppContainer } from '../utils'
+
+declare global {
+  namespace Express {
+    interface Request {
+      scope: AppContainer
+      request_context: Record<string, any>
+    }
+  }
+}
 
 export type LoaderConfig = {
   directory: string
@@ -9,6 +22,7 @@ export type LoaderConfig = {
 
 export type LoaderResult = {
   app: Express
+  container: AppContainer
 }
 
 export type ConfigModule = {
