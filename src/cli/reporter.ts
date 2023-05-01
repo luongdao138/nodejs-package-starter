@@ -153,7 +153,7 @@ export class Reporter {
    *   message to log the error under; or an error object.
    * @param {Error?} error - an error object to log message with
    */
-  error = (messageOrError, error) => {
+  error = (messageOrError, error?: any) => {
     let message = messageOrError
     if (typeof messageOrError === 'object') {
       message = messageOrError.message

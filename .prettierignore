@@ -13,3 +13,6 @@ dist
 docker_data
 .prettierrc
 .vscode
+
+# Project
+jvm-config.js

@@ -12,3 +12,11 @@
 *.env.*
 *.js
 *.cjs
+
+**/scripts/*
+**/migrations/*
+.eslintrc.cjs
+
+
+# Project
+jvm-config.js

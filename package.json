@@ -59,13 +59,13 @@
     "zod": "^3.21.4"
   },
   "scripts": {
-    "watch": "tsc --build --watch",
+    "watch": "tsc --watch --project tsconfig.build.json",
     "prepare": "cross-env NODE_ENV=production yarn run build && husky install",
-    "build": "tsc --build",
+    "build": "rm -rf dist && tsc --project tsconfig.build.json",
     "serve": "node dist/main.js",
     "test": "jest",
     "format": "prettier --write .",
-    "lint": "eslint . --max-warnings 0 --report-unused-disable-directives",
+    "lint": "eslint . --max-warnings 0 --report-unused-disable-directives --ignore-pattern *.test.ts --ignore-pattern *.test.js",
     "lint:fix": "eslint . --fix",
     "check-types": "tsc --pretty --noEmit",
     "test:watch": "jest --watch",
