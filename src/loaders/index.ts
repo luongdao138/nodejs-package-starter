@@ -10,6 +10,7 @@ import { createAppContainer } from '../utils'
 import loadConfig from './config'
 import expressLoader from './express-loader'
 import modelsLoader from './models-loader'
+import { registerPluginModels } from './plugins-loader'
 import redisLoader from './redis-loader'
 import loadRequestContext from './request-context'
 
@@ -47,6 +48,13 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
   await modelsLoader({ container })
   const mAct = logger.success(modelsActivity, 'Models initialized') || {}
   track('MODELS_INIT_COMPLETED', { duration: mAct.duration })
+
+  // load all plugins's models
+  const pmActivity = logger.activity(`Initializing plugin models${EOL}`)
+  track('PLUGIN_MODELS_INIT_STARTED')
+  await registerPluginModels({ container, rootDirectory: directory, configModule })
+  const pmAct = logger.success(pmActivity, 'Plugin models initialized') || {}
+  track('PLUGIN_MODELS_INIT_COMPLETED', { duration: pmAct.duration })
 
   return { app: expressApp, container }
 }

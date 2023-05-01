@@ -7,13 +7,12 @@ import logger from '../cli/reporter'
 import { ClassConstructor } from '../types'
 import { AppContainer } from '../utils'
 import formatRegistrationName from '../utils/format-registration-name'
+import { LoadedModule, loadModule } from '../utils/module'
 
 type Options = {
   container: AppContainer
   isTest?: boolean
 }
-
-type LoadedModule = ClassConstructor<unknown> | EntitySchema
 
 export default async function ({ container }: Options, config = { register: true }) {
   const corePath = '../models/*.js'
@@ -29,7 +28,7 @@ export default async function ({ container }: Options, config = { register: true
   const modules: LoadedModule[] = []
 
   core.forEach(async (modulePath) => {
-    const loaded = (await import(modulePath)) as LoadedModule
+    const loaded = await loadModule(modulePath)
 
     if (loaded) {
       Object.entries(loaded).map(([, val]: [string, LoadedModule]) => {
