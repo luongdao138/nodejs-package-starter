@@ -68,6 +68,7 @@
     "lint:fix": "eslint . --fix",
     "check-types": "tsc --pretty --noEmit",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "start": "nodemon"
   }
 }

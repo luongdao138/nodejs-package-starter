@@ -4,7 +4,7 @@ import { LoggerOptions } from 'typeorm'
 export type LoaderConfig = {
   directory: string
   expressApp: Express
-  isTest: boolean
+  isTest?: boolean
 }
 
 export type LoaderResult = {
@@ -22,6 +22,7 @@ export type ConfigModule = {
     database_database?: string
     database_schema?: string
     database_logging: LoggerOptions
+    http_logging?: boolean
 
     database_extra?: Record<string, unknown> & {
       ssl: { rejectUnauthorized: false }

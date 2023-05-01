@@ -36,6 +36,18 @@ const loggerInstance = winston.createLogger({
   transports,
 })
 
+// create a stream object with a 'write' function that will be used by `morgan`
+loggerInstance.stream = {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  write: function (message: string) {
+    // use the 'info' log level so the output will be picked up by both
+    // transports (file and console)
+    logger.info(message)
+  },
+}
+
+
 export class Reporter {
   public loggerInstance_: winston.Logger
   activities_: any[]
