@@ -62,3 +62,7 @@ export type Logger = _Logger & {
   info: (msg: string) => void
   warn: (msg: string) => void
 }
+
+export type ClassConstructor<T> = {
+  new (...args: unknown[]): T
+}
