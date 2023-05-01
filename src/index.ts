@@ -1,3 +1,4 @@
+import dotenv from 'dotenv-safe'
 import express from 'express'
 
 import appLoader from './loaders'
@@ -5,11 +6,17 @@ import appLoader from './loaders'
 export * from './types'
 export * from './utils'
 
-const app = express()
+const testLoader = async () => {
+  dotenv.config()
+  const app = express()
 
-appLoader({
-  directory: process.cwd(),
-  expressApp: app,
-})
+  process.env.TEST_LOADER &&
+    (await appLoader({
+      directory: process.cwd(),
+      expressApp: app,
+    }))
+}
+
+testLoader()
 
 export default appLoader
