@@ -2,6 +2,7 @@
 
 import { Express } from 'express'
 import { LoggerOptions } from 'typeorm'
+import { Logger as _Logger } from 'winston'
 
 import { AppContainer } from '../utils'
 
@@ -54,4 +55,10 @@ export type ConfigModule = {
   //       }
   //     | string
   //   )[]
+}
+
+export type Logger = _Logger & {
+  progress: (activityId: string, msg: string) => void
+  info: (msg: string) => void
+  warn: (msg: string) => void
 }
