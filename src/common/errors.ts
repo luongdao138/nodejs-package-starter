@@ -40,7 +40,7 @@ export class AppError extends Error {
    * @param {string} message - message to go along with error
    */
   constructor(type: AppErrorType, message: string) {
-    super(message)
+    super()
 
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, AppError)
@@ -49,6 +49,7 @@ export class AppError extends Error {
     this.type = type
     this.code = AppErrorDict[type] ?? AppError[AppErrorTypeDict.SERVER_ERROR] // fallback to server error
     this.timestamp = new Date().toISOString()
+    this.message = message
   }
 }
 

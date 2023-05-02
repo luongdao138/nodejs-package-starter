@@ -31,7 +31,6 @@ export function formatException(err: GlobalError): AppError {
   }
 
   const formattedErr: AppError = new AppError(type, message)
-  formattedErr.stack = err.stack
 
-  return formattedErr
+  return { ...formattedErr, stack: err.stack }
 }
