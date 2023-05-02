@@ -23,9 +23,9 @@ export function formatException(err: GlobalError): AppError {
     type = err.type as string
   } else if (err instanceof ZodError) {
     // validation error
-    const zodFormattedError = err.format()
+    const zodFormattedError = err.issues
     type = AppError.Types.ZOD_ERROR
-    message = zodFormattedError._errors[0] ?? 'Unknown error occured!'
+    message = zodFormattedError[0].message ?? 'Unknown error occured!'
   } else {
     type = AppError.Types.SERVER_ERROR
   }
