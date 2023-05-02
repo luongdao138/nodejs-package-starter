@@ -36,7 +36,7 @@ export default async function ({ container }: Options, config = { register: true
 
       if (loaded) {
         Object.entries(loaded).map(([, val]: [string, LoadedModule]) => {
-          if (typeof val === 'function' || (val instanceof EntitySchema && config.register)) {
+          if ((typeof val === 'function' || val instanceof EntitySchema) && config.register) {
             const moduleName = formatRegistrationName(modulePath)
 
             container.register({
