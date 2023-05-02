@@ -21,7 +21,11 @@ export default async function ({ container }: Options, config = { register: true
 
   const core = glob.sync(coreFull, {
     cwd: __dirname,
-    ignore: ['index.js', 'index.ts'],
+    ignore: {
+      ignored(p) {
+        return !p.name.includes('index.js') && !p.name.includes('index.ts')
+      },
+    },
   })
 
   const modules: LoadedModule[] = []
