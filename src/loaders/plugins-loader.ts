@@ -2,16 +2,18 @@ import { asValue } from 'awilix'
 import { glob } from 'glob'
 import { EntitySchema } from 'typeorm'
 
-import { ConfigModule } from '../types'
+import { ClassConstructor, ConfigModule } from '../types'
 import { AppContainer } from '../utils'
 import formatRegistrationName from '../utils/format-registration-name'
-import { LoadedModule, loadModule } from '../utils/module'
+import { loadModule } from '../utils/module'
 
 type Options = {
   container: AppContainer
   rootDirectory: string
   configModule: ConfigModule
 }
+
+type LoadedModule = ClassConstructor<unknown> | EntitySchema
 
 interface PluginDetails {
   resolve: string
@@ -60,7 +62,7 @@ export async function registerModels(pluginDetail: PluginDetails, container: App
 
   await Promise.all(
     files.map(async (file) => {
-      const loaded = await loadModule(file)
+      const loaded = await loadModule<LoadedModule>(file)
 
       Object.entries(loaded).forEach(([, val]: [string, LoadedModule]) => {
         if (typeof val === 'function' && val instanceof EntitySchema) {

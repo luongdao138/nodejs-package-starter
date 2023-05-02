@@ -3,22 +3,21 @@ import { glob } from 'glob'
 import path from 'path'
 import { EntitySchema } from 'typeorm'
 
-import logger from '../cli/reporter'
 import { ClassConstructor } from '../types'
 import { AppContainer } from '../utils'
 import formatRegistrationName from '../utils/format-registration-name'
-import { LoadedModule, loadModule } from '../utils/module'
+import { loadModule } from '../utils/module'
 
 type Options = {
   container: AppContainer
   isTest?: boolean
 }
 
+type LoadedModule = ClassConstructor<unknown> | EntitySchema
+
 export default async function ({ container }: Options, config = { register: true }) {
   const corePath = '../models/*.js'
   const coreFull = path.join(__dirname, corePath)
-
-  logger.info(`Loaded models in folder: ${coreFull}`)
 
   const core = glob.sync(coreFull, {
     cwd: __dirname,
@@ -28,7 +27,7 @@ export default async function ({ container }: Options, config = { register: true
   const modules: LoadedModule[] = []
 
   core.forEach(async (modulePath) => {
-    const loaded = await loadModule(modulePath)
+    const loaded = await loadModule<LoadedModule>(modulePath)
 
     if (loaded) {
       Object.entries(loaded).map(([, val]: [string, LoadedModule]) => {

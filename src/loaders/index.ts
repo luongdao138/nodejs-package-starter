@@ -13,6 +13,7 @@ import expressLoader from './express-loader'
 import modelsLoader from './models-loader'
 import { registerPluginModels } from './plugins-loader'
 import redisLoader from './redis-loader'
+import repositoresLoader from './repositores-loader'
 import loadRequestContext from './request-context'
 
 const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<LoaderResult> => {
@@ -66,6 +67,13 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
   await databaseLoader({ container, configModule })
   const dbAct = logger.success(dbActivity, 'Database initialized') || {}
   track('DATABASE_INIT_COMPLETED', { duration: dbAct.duration })
+
+  // load all internal repositories
+  const repoActivity = logger.activity(`Initializing repositories${EOL}`)
+  track('REPOSITORIES_INIT_STARTED')
+  await repositoresLoader({ container })
+  const rAct = logger.success(repoActivity, 'Repositories initialized') || {}
+  track('REPOSITORIES_INIT_COMPLETED', { duration: rAct.duration })
 
   return { app: expressApp, container }
 }
