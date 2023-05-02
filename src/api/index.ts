@@ -30,7 +30,7 @@ export default function (container: AppContainer, config: ConfigModule) {
     const notFoundError = new AppError(AppError.Types.NOT_FOUND, 'Resource not found!')
     const formattedError = formatException(notFoundError)
 
-    res.json(formattedError.code).json(formattedError)
+    res.status(+formattedError.code).json(formattedError)
   })
 
   return masterRoute

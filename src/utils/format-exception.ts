@@ -19,8 +19,8 @@ export function formatException(err: GlobalError): AppError {
 
   let type: string
 
-  if (err instanceof AppError) {
-    type = err.type
+  if (err instanceof AppError || 'type' in err) {
+    type = err.type as string
   } else if (err instanceof ZodError) {
     // validation error
     const zodFormattedError = err.format()
