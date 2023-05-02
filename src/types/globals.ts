@@ -5,7 +5,6 @@ import { DatabaseType, LoggerOptions } from 'typeorm'
 import { Logger as _Logger } from 'winston'
 
 import { AppContainer } from '../utils'
-
 declare global {
   namespace Express {
     interface Request {

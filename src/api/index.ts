@@ -2,6 +2,7 @@ import { Router } from 'express'
 
 import { ConfigModule } from '../types'
 import { AppContainer } from '../utils'
+import errorHandler from './middlewares/error-handler'
 import initAdminRoute from './routes/admin'
 import initFrontRoute from './routes/front'
 
@@ -13,6 +14,7 @@ export default function (container: AppContainer, config: ConfigModule) {
   initAdminRoute(masterRoute, container, config)
 
   // error handlers
+  masterRoute.use(errorHandler)
 
   // not founf handlers
 
