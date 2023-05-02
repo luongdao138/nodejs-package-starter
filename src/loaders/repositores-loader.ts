@@ -16,14 +16,16 @@ export default async function ({ container }: Options) {
 
   const core = glob.sync(coreFull, { cwd: __dirname })
 
-  core.forEach(async (modulePath) => {
-    const loaded = (await loadModule<any>(modulePath)).default
+  await Promise.all(
+    core.map(async (modulePath) => {
+      const loaded = (await loadModule<any>(modulePath)).default
 
-    if (typeof loaded === 'object') {
-      const registrationName = formatRegistrationName(modulePath)
-      container.register({
-        [registrationName]: asValue(loaded),
-      })
-    }
-  })
+      if (typeof loaded === 'object') {
+        const registrationName = formatRegistrationName(modulePath)
+        container.register({
+          [registrationName]: asValue(loaded),
+        })
+      }
+    }),
+  )
 }

@@ -26,25 +26,27 @@ export default async function ({ container }: Options, config = { register: true
 
   const modules: LoadedModule[] = []
 
-  core.forEach(async (modulePath) => {
-    const loaded = await loadModule<LoadedModule>(modulePath)
+  await Promise.all(
+    core.map(async (modulePath) => {
+      const loaded = await loadModule<LoadedModule>(modulePath)
 
-    if (loaded) {
-      Object.entries(loaded).map(([, val]: [string, LoadedModule]) => {
-        if (typeof val === 'function' || (val instanceof EntitySchema && config.register)) {
-          const moduleName = formatRegistrationName(modulePath)
+      if (loaded) {
+        Object.entries(loaded).map(([, val]: [string, LoadedModule]) => {
+          if (typeof val === 'function' || (val instanceof EntitySchema && config.register)) {
+            const moduleName = formatRegistrationName(modulePath)
 
-          container.register({
-            [moduleName]: asClass(val as ClassConstructor<unknown>),
-          })
+            container.register({
+              [moduleName]: asClass(val as ClassConstructor<unknown>),
+            })
 
-          container.registerAdd('db_entities', asValue(val))
+            container.registerAdd('db_entities', asValue(val))
 
-          modules.push(val)
-        }
-      })
-    }
-  })
+            modules.push(val)
+          }
+        })
+      }
+    }),
+  )
 
   return modules
 }
