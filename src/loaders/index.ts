@@ -17,6 +17,7 @@ import { registerPluginModels } from './plugins-loader'
 import redisLoader from './redis-loader'
 import repositoresLoader from './repositores-loader'
 import loadRequestContext from './request-context'
+import servicesLoader from './services-loader'
 
 const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<LoaderResult> => {
   const configModule = loadConfig(directory)
@@ -80,6 +81,11 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
   })
 
   // services loader
+  const servicesActivity = logger.activity(`Initializing services${EOL}`)
+  track('SERVICES_INIT_STARTED')
+  servicesLoader({ container, configModule })
+  const servAct = logger.success(servicesActivity, 'Services initialized') || {}
+  track('SERVICES_INIT_COMPLETED', { duration: servAct.duration })
 
   // load basic epxress app config
   const expActivity = logger.activity(`Initializing express${EOL}`)
