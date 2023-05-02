@@ -6,6 +6,7 @@
   "author": "luongdao <luong.dao@pionero.io>",
   "license": "MIT",
   "devDependencies": {
+    "@types/cors": "^2.8.13",
     "@types/dotenv-safe": "^8.1.2",
     "@types/express": "^4.17.17",
     "@types/ioredis": "^5.0.0",
@@ -71,6 +72,8 @@
     "check-types": "tsc --pretty --noEmit",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "start": "nodemon"
+    "start": "nodemon",
+    "typeorm:cli": "node ./node_modules/typeorm/cli",
+    "migration": "npm run typeorm:cli -- migration:generate New"
   }
 }

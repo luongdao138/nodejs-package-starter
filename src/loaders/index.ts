@@ -8,6 +8,7 @@ import { EOL } from 'os'
 import logger from '../cli/reporter'
 import { LoaderConfig, LoaderResult } from '../types/globals'
 import { AppContainer, createAppContainer } from '../utils'
+import apiLoader from './api-loader'
 import loadConfig from './config'
 import databaseLoader from './database-loader'
 import expressLoader from './express-loader'
@@ -78,10 +79,13 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
     manager: asValue(dataSource.manager),
   })
 
+  // services loader
+
   // load basic epxress app config
   const expActivity = logger.activity(`Initializing express${EOL}`)
   track('EXPRESS_INIT_STARTED')
   await expressLoader({ app: expressApp })
+  // passport loader
   const exAct = logger.success(expActivity, 'Express intialized') || {}
   track('EXPRESS_INIT_COMPLETED', { duration: exAct.duration })
 
@@ -91,6 +95,19 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
     req.scope = container.createScope() as AppContainer
     next()
   })
+
+  // plugins loader (only project plugin for now)
+
+  // subscribers loader
+
+  // apis loaders
+  const apiActivity = logger.activity(`Initializing API${EOL}`)
+  track('API_INIT_STARTED')
+  await apiLoader({ container, app: expressApp })
+  const apiAct = logger.success(apiActivity, 'API initialized') || {}
+  track('API_INIT_COMPLETED', { duration: apiAct.duration })
+
+  // default loaders
 
   return { app: expressApp, container }
 }
