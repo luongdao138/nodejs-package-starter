@@ -65,7 +65,7 @@ export async function registerModels(pluginDetail: PluginDetails, container: App
       const loaded = await loadModule<LoadedModule>(file)
 
       Object.entries(loaded).forEach(([, val]: [string, LoadedModule]) => {
-        if (typeof val === 'function' && val instanceof EntitySchema) {
+        if (typeof val === 'function' || val instanceof EntitySchema) {
           const name = formatRegistrationName(file)
 
           container.register({
