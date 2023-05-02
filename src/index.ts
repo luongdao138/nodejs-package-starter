@@ -5,7 +5,6 @@ import appLoader from './loaders'
 
 export * from './common'
 export * from './models'
-export * from './repositories'
 export * from './types'
 export * from './utils'
 
