@@ -23,7 +23,7 @@ export default async function ({ container }: Options, config = { register: true
     cwd: __dirname,
     ignore: {
       ignored(p) {
-        return !p.name.includes('index.js') && !p.name.includes('index.ts')
+        return p.name.includes('index.js') || p.name.includes('index.ts')
       },
     },
   })
