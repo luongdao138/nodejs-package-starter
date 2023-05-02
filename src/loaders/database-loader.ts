@@ -12,14 +12,14 @@ type Options = {
   }
 }
 
-let datasource: DataSource
+export let dataSource: DataSource
 
 export default async function ({ container, configModule, customOptions }: Options): Promise<DataSource> {
   // get all entities from awilix container
   const entities = container.resolve('db_entities')
 
-  // init typeorm datasource (not support sqlite)
-  datasource = new DataSource({
+  // init typeorm dataSource (not support sqlite)
+  dataSource = new DataSource({
     type: configModule?.projectConfig.database_type ?? 'postgres',
     url: configModule.projectConfig.database_url,
     database: configModule.projectConfig.database_database,
@@ -30,7 +30,7 @@ export default async function ({ container, configModule, customOptions }: Optio
     logging: customOptions?.logging ?? configModule.projectConfig.database_logging ?? false,
   } as DataSourceOptions)
 
-  await datasource.initialize()
+  await dataSource.initialize()
 
-  return datasource
+  return dataSource
 }
