@@ -1,11 +1,11 @@
 import { Router } from 'express'
 
+import { wrapHandler } from '../../../../common/wrap-handler'
+
 const userRoute = Router()
 
 export default async function (baseRoute: Router) {
-  userRoute.get('/', (req, res) => {
-    res.json({ msg: 'Tada! Welcome to users route!' })
-  })
+  userRoute.get('/', wrapHandler((await import('./get-users')).default))
 
   baseRoute.use('/users', userRoute)
 
