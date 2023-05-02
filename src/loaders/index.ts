@@ -1,12 +1,13 @@
 import 'reflect-metadata'
 
 import { asValue } from 'awilix'
+import { NextFunction, Request, Response } from 'express'
 import { track } from 'medusa-telemetry'
 import { EOL } from 'os'
 
 import logger from '../cli/reporter'
 import { LoaderConfig, LoaderResult } from '../types/globals'
-import { createAppContainer } from '../utils'
+import { AppContainer, createAppContainer } from '../utils'
 import loadConfig from './config'
 import databaseLoader from './database-loader'
 import expressLoader from './express-loader'
@@ -41,9 +42,6 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
   await redisLoader({ container, configModule, logger: logger as any })
   track('Redis DB inited')
 
-  // load basic epxress app config
-  await expressLoader({ app: expressApp })
-
   // load all db models
   const modelsActivity = logger.activity(`Initializing models${EOL}`)
   track('MODELS_INIT_STARTED')
@@ -64,7 +62,7 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
   // currently not support sqlite (use postgresql, mysql instead)
   const dbActivity = logger.activity(`Initializing database${EOL}`)
   track('DATABASE_INIT_STARTED')
-  await databaseLoader({ container, configModule })
+  const dataSource = await databaseLoader({ container, configModule })
   const dbAct = logger.success(dbActivity, 'Database initialized') || {}
   track('DATABASE_INIT_COMPLETED', { duration: dbAct.duration })
 
@@ -74,6 +72,25 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
   await repositoresLoader({ container })
   const rAct = logger.success(repoActivity, 'Repositories initialized') || {}
   track('REPOSITORIES_INIT_COMPLETED', { duration: rAct.duration })
+
+  // register datasource to container
+  container.register({
+    manager: asValue(dataSource.manager),
+  })
+
+  // load basic epxress app config
+  const expActivity = logger.activity(`Initializing express${EOL}`)
+  track('EXPRESS_INIT_STARTED')
+  await expressLoader({ app: expressApp })
+  const exAct = logger.success(expActivity, 'Express intialized') || {}
+  track('EXPRESS_INIT_COMPLETED', { duration: exAct.duration })
+
+  // Add the registered services to the request scope
+  expressApp.use((req: Request, res: Response, next: NextFunction) => {
+    container.register({ manager: asValue(dataSource.manager) })
+    req.scope = container.createScope() as AppContainer
+    next()
+  })
 
   return { app: expressApp, container }
 }
