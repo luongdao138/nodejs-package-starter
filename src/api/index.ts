@@ -1,8 +1,8 @@
-import { Request, Response, Router } from 'express'
+import { Router } from 'express'
 
-import { GlobalError } from '../common'
-import { ConfigModule, Logger } from '../types'
-import { AppContainer, formatException } from '../utils'
+import { ConfigModule } from '../types'
+import { AppContainer } from '../utils'
+import errorHandler from './middlewares/error-handler'
 import initAdminRoute from './routes/admin'
 import initFrontRoute from './routes/front'
 
@@ -15,15 +15,7 @@ export default function (container: AppContainer, config: ConfigModule) {
   initAdminRoute(masterRoute, container, config)
 
   // error handlers
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  masterRoute.use((error: GlobalError, req: Request, res: Response, next) => {
-    const logger = req.scope.resolve<Logger>('logger')
-
-    const formattedError = formatException(error)
-    logger.error(error)
-
-    return res.status(Number(formattedError.code)).json(formattedError)
-  })
+  masterRoute.use(errorHandler)
 
   return masterRoute
 }
