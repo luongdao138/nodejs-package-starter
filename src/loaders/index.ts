@@ -8,6 +8,7 @@ import logger from '../cli/reporter'
 import { LoaderConfig, LoaderResult } from '../types/globals'
 import { createAppContainer } from '../utils'
 import loadConfig from './config'
+import databaseLoader from './database-loader'
 import expressLoader from './express-loader'
 import modelsLoader from './models-loader'
 import { registerPluginModels } from './plugins-loader'
@@ -55,6 +56,16 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
   await registerPluginModels({ container, rootDirectory: directory, configModule })
   const pmAct = logger.success(pmActivity, 'Plugin models initialized') || {}
   track('PLUGIN_MODELS_INIT_COMPLETED', { duration: pmAct.duration })
+
+  // strategies loaders => currently not available
+
+  // create datasource and connect to db
+  // currently not support sqlite (use postgresql, mysql instead)
+  const dbActivity = logger.activity(`Initializing database${EOL}`)
+  track('DATABASE_INIT_STARTED')
+  await databaseLoader({ container, configModule })
+  const dbAct = logger.success(dbActivity, 'Database initialized') || {}
+  track('DATABASE_INIT_COMPLETED', { duration: dbAct.duration })
 
   return { app: expressApp, container }
 }

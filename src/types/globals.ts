@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 
 import { Express } from 'express'
-import { LoggerOptions } from 'typeorm'
+import { DatabaseType, LoggerOptions } from 'typeorm'
 import { Logger as _Logger } from 'winston'
 
 import { AppContainer } from '../utils'
@@ -33,7 +33,7 @@ export type ConfigModule = {
     cookie_secret?: string
 
     database_url?: string
-    database_type: string
+    database_type: DatabaseType
     database_database?: string
     database_schema?: string
     database_logging: LoggerOptions
