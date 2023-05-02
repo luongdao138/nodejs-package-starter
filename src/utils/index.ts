@@ -1,4 +1,5 @@
 export * from './awilix-container'
+export * from './format-exception'
 export * from './format-registration-name'
 export * from './generate-entity-id'
 export * from './get-config-file'

@@ -18,7 +18,7 @@ export const AppErrorDict: { [key: string]: AppErrorCode } = {
   [AppErrorTypeDict.UNAUTHORIZED]: 401,
   [AppErrorTypeDict.UNAUTHENTICATED]: 403,
   [AppErrorTypeDict.BAD_REQUEST]: 400,
-  [AppErrorTypeDict.ZOD_ERROR]: 250,
+  [AppErrorTypeDict.ZOD_ERROR]: 400,
   [AppErrorTypeDict.DUPLICATE_ERROR]: 422,
   [AppErrorTypeDict.SERVER_ERROR]: 500,
 }
