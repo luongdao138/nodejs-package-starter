@@ -5,6 +5,7 @@ import { NextFunction, Request, Response } from 'express'
 import { track } from 'medusa-telemetry'
 import { EOL } from 'os'
 
+import notFoundHandler from '../api/middlewares/not-found-handler'
 import logger from '../cli/reporter'
 import { LoaderConfig, LoaderResult } from '../types/globals'
 import { AppContainer, createAppContainer } from '../utils'
@@ -114,6 +115,9 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
   track('API_INIT_COMPLETED', { duration: apiAct.duration })
 
   // default loaders
+
+  // not found handlers
+  expressApp.use('*', notFoundHandler)
 
   return { app: expressApp, container }
 }
