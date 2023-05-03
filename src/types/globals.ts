@@ -47,13 +47,13 @@ export type ConfigModule = {
   }
   //   featureFlags: Record<string, boolean | string>
   //   modules?: Record<string, false | string | Partial<InternalModuleDeclaration | ExternalModuleDeclaration>>
-  //   plugins: (
-  //     | {
-  //         resolve: string
-  //         options: Record<string, unknown>
-  //       }
-  //     | string
-  //   )[]
+  plugins: (
+    | {
+        resolve: string
+        options: Record<string, unknown>
+      }
+    | string
+  )[]
 }
 
 export type Logger = _Logger & {

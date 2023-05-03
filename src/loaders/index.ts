@@ -14,7 +14,7 @@ import loadConfig from './config'
 import databaseLoader from './database-loader'
 import expressLoader from './express-loader'
 import modelsLoader from './models-loader'
-import { registerPluginModels } from './plugins-loader'
+import pluginsLoader, { registerPluginModels } from './plugins-loader'
 import redisLoader from './redis-loader'
 import repositoresLoader from './repositores-loader'
 import loadRequestContext from './request-context'
@@ -104,6 +104,17 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
   })
 
   // plugins loader (only project plugin for now)
+  const pluginsActivity = logger.activity(`Initializing plugins${EOL}`)
+  track('PLUGINS_INIT_STARTED')
+  await pluginsLoader({
+    activityId: pluginsActivity,
+    app: expressApp,
+    configModule,
+    container,
+    rootDirectory: directory,
+  })
+  const pAct = logger.success(pluginsActivity, 'Plugins intialized') || {}
+  track('PLUGINS_INIT_COMPLETED', { duration: pAct.duration })
 
   // subscribers loader
 
