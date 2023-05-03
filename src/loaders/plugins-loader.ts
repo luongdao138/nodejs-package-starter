@@ -195,6 +195,7 @@ export async function registerApis(
   rootDirectory: string,
   container: AppContainer,
   activityId: string,
+  configModule: ConfigModule,
 ) {
   const logger = container.resolve<Logger>('logger')
 
@@ -205,7 +206,7 @@ export async function registerApis(
 
     if (!initCustomRoutes || !_.isFunction(initCustomRoutes)) return app
 
-    app.use(BASE_ENDPOINT, initCustomRoutes(rootDirectory, pluginDetail.options))
+    app.use(BASE_ENDPOINT, initCustomRoutes(rootDirectory, configModule, pluginDetail.options || {}))
 
     return app
   } catch (error) {
@@ -258,7 +259,7 @@ export default async function ({ configModule, rootDirectory, app, container, ac
     resolvedPlugins.map(async (pluginDetail) => {
       await registerRepositories(pluginDetail, container)
       await registerServices(pluginDetail, container, configModule)
-      await registerApis(pluginDetail, app, rootDirectory, container, activityId)
+      await registerApis(pluginDetail, app, rootDirectory, container, activityId, configModule)
     }),
   )
 
