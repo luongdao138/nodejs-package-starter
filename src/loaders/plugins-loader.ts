@@ -1,4 +1,4 @@
-import { asValue } from 'awilix'
+import { asFunction, asValue, Lifetime } from 'awilix'
 import { Express } from 'express'
 import { glob } from 'glob'
 import _ from 'lodash'
@@ -149,6 +149,45 @@ export async function registerRepositories(pluginDetail: PluginDetails, containe
   )
 }
 
+/**
+ * Registers a service at the right location in our container. If the service is
+ * a BaseService instance it will be available directly from the container.
+ * container. Names are camelCase formatted and namespaced by the folder i.e:
+ * services/example-payments -> examplePaymentsService
+ * @param {object} pluginDetails - the plugin details including plugin options,
+ *    version, id, resolved path, etc. See resolvePlugin
+ * @param {object} container - the container where the services will be
+ * @param {object} configModule - the configModule loaded from config file
+ * @return {void}
+ */
+export async function registerServices(
+  pluginDetail: PluginDetails,
+  container: AppContainer,
+  configModule: ConfigModule,
+) {
+  const files = glob.sync(`${pluginDetail.resolve}/services/*.js`, {
+    ignore: {
+      ignored: (p) => p.name.endsWith('index.js'),
+    },
+  })
+
+  await Promise.all(
+    files.map(async (file) => {
+      const loaded = (await loadModule<any>(file)).default
+
+      if (!loaded) return
+
+      const name = formatRegistrationName(file)
+
+      container.register({
+        [name]: asFunction((cradle) => new loaded(cradle, configModule, pluginDetail.options), {
+          lifetime: loaded.LIFE_TIME || Lifetime.SCOPED,
+        }),
+      })
+    }),
+  )
+}
+
 export async function registerModels(pluginDetail: PluginDetails, container: AppContainer) {
   const files = glob.sync(`${pluginDetail.resolve}/models/*.js`, {})
 
@@ -190,6 +229,7 @@ export default async function ({ configModule, rootDirectory, app, container }: 
   await Promise.all(
     resolvedPlugins.map(async (pluginDetail) => {
       await registerRepositories(pluginDetail, container)
+      await registerServices(pluginDetail, container, configModule)
     }),
   )
 
