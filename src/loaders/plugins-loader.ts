@@ -2,7 +2,7 @@ import { asValue } from 'awilix'
 import { Express } from 'express'
 import { glob } from 'glob'
 import _ from 'lodash'
-import { EntitySchema } from 'typeorm'
+import { EntitySchema, Repository } from 'typeorm'
 
 import { ClassConstructor, ConfigModule, Logger } from '../types'
 import { AppContainer } from '../utils'
@@ -121,6 +121,34 @@ export async function registerPluginModels({ container, rootDirectory, configMod
   )
 }
 
+/**
+ * Register a plugin's repositories at the right location in awilix container
+ * repositories are registered directly in the container
+ * @param {object} pluginDetail - the plugin details including plugin options
+ * @param {object} container  - the container where the repositories will be registered
+ */
+export async function registerRepositories(pluginDetail: PluginDetails, container: AppContainer) {
+  const files = glob.sync(`${pluginDetail.resolve}/repositories/*.js`, {
+    ignore: {
+      ignored: (p) => p.name.endsWith('index.js'),
+    },
+  })
+
+  await Promise.all(
+    files.map(async (file) => {
+      const loaded = (await loadModule<any>(file)).default
+
+      if (!loaded || !(loaded instanceof Repository)) return
+
+      const name = formatRegistrationName(file)
+
+      container.register({
+        [name]: asValue(loaded),
+      })
+    }),
+  )
+}
+
 export async function registerModels(pluginDetail: PluginDetails, container: AppContainer) {
   const files = glob.sync(`${pluginDetail.resolve}/models/*.js`, {})
 
@@ -159,6 +187,11 @@ export default async function ({ configModule, rootDirectory, app, container }: 
   await Promise.all(resolvedPlugins.map(async (pluginDetails) => await runSetupFunctions(pluginDetails)))
 
   // register all plugins's repositories, services, api, ...
+  await Promise.all(
+    resolvedPlugins.map(async (pluginDetail) => {
+      await registerRepositories(pluginDetail, container)
+    }),
+  )
 
   // run all plugin's loaders
   await Promise.all(resolvedPlugins.map(async (pluginDetail) => runPluginLoaders(pluginDetail, container, app)))
