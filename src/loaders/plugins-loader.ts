@@ -1,9 +1,10 @@
 import { asValue } from 'awilix'
 import { Express } from 'express'
 import { glob } from 'glob'
+import _ from 'lodash'
 import { EntitySchema } from 'typeorm'
 
-import { ClassConstructor, ConfigModule } from '../types'
+import { ClassConstructor, ConfigModule, Logger } from '../types'
 import { AppContainer } from '../utils'
 import formatRegistrationName from '../utils/format-registration-name'
 import { loadModule } from '../utils/module'
@@ -65,11 +66,31 @@ async function runSetupFunctions(pluginDetail: PluginDetails): Promise<void> {
   )
 }
 
+async function runPluginLoaders(pluginDetail: PluginDetails, container: AppContainer, app: Express) {
+  const files = glob.sync(`${pluginDetail.resolve}/loaders/[!__]*.js`)
+
+  await Promise.all(
+    files.map(async (file) => {
+      const loaded = (await loadModule<any>(file)).default
+
+      if (!_.isFunction(loaded)) return
+
+      try {
+        await loaded(container, app, pluginDetail.options)
+      } catch (error) {
+        const logger = container.resolve<Logger>('logger')
+        logger.warn(`a loader function from ${pluginDetail.name} failed: ${error.message}`)
+        return Promise.resolve()
+      }
+    }),
+  )
+}
+
 // only resolved project plugin for now
 function getResolvedPlugins(rootDirectory: string, configModule: ConfigModule): PluginDetails[] {
   const { plugins = [] } = configModule
   const resolved: PluginDetails[] = plugins.map((plugin) => {
-    if (typeof plugin === 'string') {
+    if (_.isString(plugin)) {
       return resolvePlugin(plugin)
     }
 
@@ -130,10 +151,15 @@ type Options = {
   activityId: string
 }
 
-export default async function ({ configModule, rootDirectory }: Options) {
+export default async function ({ configModule, rootDirectory, app, container }: Options) {
   // get all resolved plugins
   const resolvedPlugins = getResolvedPlugins(rootDirectory, configModule)
 
   // run all setup functions of each plugin
   await Promise.all(resolvedPlugins.map(async (pluginDetails) => await runSetupFunctions(pluginDetails)))
+
+  // register all plugins's repositories, services, api, ...
+
+  // run all plugin's loaders
+  await Promise.all(resolvedPlugins.map(async (pluginDetail) => runPluginLoaders(pluginDetail, container, app)))
 }
