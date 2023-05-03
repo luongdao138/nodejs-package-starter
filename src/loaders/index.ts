@@ -91,7 +91,7 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
   // load basic epxress app config
   const expActivity = logger.activity(`Initializing express${EOL}`)
   track('EXPRESS_INIT_STARTED')
-  await expressLoader({ app: expressApp })
+  await expressLoader({ app: expressApp, configModule })
   // passport loader
   const exAct = logger.success(expActivity, 'Express intialized') || {}
   track('EXPRESS_INIT_COMPLETED', { duration: exAct.duration })
