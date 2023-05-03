@@ -10,11 +10,16 @@ type Options = {
   configModule?: ConfigModule
 }
 
-export default async function ({ app }: Options) {
+export default async function ({ app, configModule }: Options) {
   app.set('trust proxy', 1)
   app.use(express.json())
   app.use(helmet())
-  app.use(morgan('combined', { stream: logger.loggerInstance_.stream, skip: () => process.env.NODE_ENV === 'test' }))
+  app.use(
+    morgan('combined', {
+      stream: logger.loggerInstance_.stream,
+      skip: () => process.env.NODE_ENV === 'test' || !configModule?.projectConfig?.http_logging,
+    }),
+  )
 
   app.get('/health', (req, res) => {
     res.status(200).send('OK')
