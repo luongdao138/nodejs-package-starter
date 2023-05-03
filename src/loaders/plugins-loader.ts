@@ -4,6 +4,7 @@ import { glob } from 'glob'
 import _ from 'lodash'
 import { EntitySchema, Repository } from 'typeorm'
 
+import { BASE_ENDPOINT } from '../constants/api'
 import { ClassConstructor, ConfigModule, Logger } from '../types'
 import { AppContainer } from '../utils'
 import formatRegistrationName from '../utils/format-registration-name'
@@ -188,6 +189,33 @@ export async function registerServices(
   )
 }
 
+export async function registerApis(
+  pluginDetail: PluginDetails,
+  app: Express,
+  rootDirectory: string,
+  container: AppContainer,
+  activityId: string,
+) {
+  const logger = container.resolve<Logger>('logger')
+
+  logger.progress(activityId, `Registering custom endpoints for ${pluginDetail.name}`)
+
+  try {
+    const initCustomRoutes = (await loadModule<any>(`${pluginDetail.resolve}/api`)).default
+
+    if (!initCustomRoutes || !_.isFunction(initCustomRoutes)) return app
+
+    app.use(BASE_ENDPOINT, initCustomRoutes(rootDirectory, pluginDetail.options))
+
+    return app
+  } catch (error) {
+    if (error.message !== `Cannot find module '${pluginDetail.resolve}/api'`) {
+      logger.progress(activityId, `No customer endpoints registered for ${pluginDetail.name}`)
+    }
+    return app
+  }
+}
+
 export async function registerModels(pluginDetail: PluginDetails, container: AppContainer) {
   const files = glob.sync(`${pluginDetail.resolve}/models/*.js`, {})
 
@@ -218,7 +246,7 @@ type Options = {
   activityId: string
 }
 
-export default async function ({ configModule, rootDirectory, app, container }: Options) {
+export default async function ({ configModule, rootDirectory, app, container, activityId }: Options) {
   // get all resolved plugins
   const resolvedPlugins = getResolvedPlugins(rootDirectory, configModule)
 
@@ -230,6 +258,7 @@ export default async function ({ configModule, rootDirectory, app, container }: 
     resolvedPlugins.map(async (pluginDetail) => {
       await registerRepositories(pluginDetail, container)
       await registerServices(pluginDetail, container, configModule)
+      await registerApis(pluginDetail, app, rootDirectory, container, activityId)
     }),
   )
 
