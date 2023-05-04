@@ -165,7 +165,7 @@ export async function registerServices(
   pluginDetail: PluginDetails,
   container: AppContainer,
   configModule: ConfigModule,
-) {
+): Promise<void> {
   const files = glob.sync(`${pluginDetail.resolve}/services/*.js`, {
     ignore: {
       ignored: (p) => p.name.endsWith('index.js'),

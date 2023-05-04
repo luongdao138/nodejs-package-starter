@@ -6,8 +6,8 @@ import { Post } from './post'
 
 @Entity()
 export class User extends BaseEntity {
-  @Column({ type: 'varchar' })
-  username: string | null
+  @Column({ type: 'varchar', nullable: false })
+  username: string
 
   @Index('user_email_idx', { unique: true })
   @Column({ type: 'varchar', nullable: false })
