@@ -90,6 +90,7 @@ async function runPluginLoaders(pluginDetail: PluginDetails, container: AppConta
 // only resolved project plugin for now
 function getResolvedPlugins(rootDirectory: string, configModule: ConfigModule): PluginDetails[] {
   const { plugins = [] } = configModule
+  const isLocalProject = process.cwd() === rootDirectory
   const resolved: PluginDetails[] = plugins.map((plugin) => {
     if (_.isString(plugin)) {
       return resolvePlugin(plugin)
@@ -101,13 +102,15 @@ function getResolvedPlugins(rootDirectory: string, configModule: ConfigModule): 
     return details
   })
 
-  resolved.push({
-    name: 'project-plugin',
-    id: createPluginId('project-plugin'),
-    options: {},
-    version: createFileContentHash(process.cwd(), '**'),
-    resolve: `${rootDirectory}/dist`,
-  })
+  if (!isLocalProject) {
+    resolved.push({
+      name: 'project-plugin',
+      id: createPluginId('project-plugin'),
+      options: {},
+      version: createFileContentHash(process.cwd(), '**'),
+      resolve: `${rootDirectory}/dist`,
+    })
+  }
 
   return resolved
 }

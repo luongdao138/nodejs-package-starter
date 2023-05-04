@@ -84,7 +84,7 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
   // services loader
   const servicesActivity = logger.activity(`Initializing services${EOL}`)
   track('SERVICES_INIT_STARTED')
-  servicesLoader({ container, configModule })
+  await servicesLoader({ container, configModule })
   const servAct = logger.success(servicesActivity, 'Services initialized') || {}
   track('SERVICES_INIT_COMPLETED', { duration: servAct.duration })
 
