@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:14
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: jvm-development
+    volumes:
+      - ./docker_data/postgres:/var/lib/postgresql/data
+      - ./docker_data/postgres_sql:/home/postgres_sql
