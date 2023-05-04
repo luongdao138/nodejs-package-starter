@@ -1,6 +1,9 @@
 
 # Install dependencies
-yarn 
+yarn
+
+# Run migrations
+yarn migration:run
 
 # Start server
 yarn start
