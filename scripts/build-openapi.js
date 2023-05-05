@@ -23,19 +23,11 @@ function normalizeOAS(obj) {
 }
 
 // front API JSON format
-swaggerInline(
-  [
-    './src/models/*.ts',
-    './src/api/middlewares/**/*.ts',
-    './src/api/routes/front/**/*.ts',
-    './src/api/middlewares/**/*.ts',
-  ],
-  {
-    base: './jvm-client/docs/front-spec-base.yaml',
-    ignore: [],
-    format: '.json',
-  },
-)
+swaggerInline(['./src/models/*.ts', './src/api/middlewares/**/*.ts', './src/api/routes/front/**/*.ts'], {
+  base: './jvm-client/docs/front-spec-base.yaml',
+  ignore: [],
+  format: '.json',
+})
   .then((gen) => {
     const oas = new OAS(gen)
 
@@ -63,19 +55,11 @@ swaggerInline(
   })
 
 // front API yaml format
-swaggerInline(
-  [
-    './src/models/*.ts',
-    './src/api/middlewares/**/*.ts',
-    './src/api/routes/front/**/*.ts',
-    './src/api/middlewares/**/*.ts',
-  ],
-  {
-    base: './jvm-client/docs/front-spec-base.yaml',
-    ignore: [],
-    format: '.yaml',
-  },
-)
+swaggerInline(['./src/models/*.ts', './src/api/middlewares/**/*.ts', './src/api/routes/front/**/*.ts'], {
+  base: './jvm-client/docs/front-spec-base.yaml',
+  ignore: [],
+  format: '.yaml',
+})
   .then((gen) => {
     if (!isDryRun) {
       // write file
