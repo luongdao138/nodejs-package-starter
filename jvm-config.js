@@ -31,17 +31,17 @@ const DATABASE_URL =
 
 const HTTP_LOGGING = process.env.HTTP_LOGGING === 'true'
 
-/** @type {import('./nodejs-package-starter/dist').ConfigModule['projectConfig']} */
+/** @type {import('./src/types/globals').ConfigModule['projectConfig']} */
 const projectConfig = {
      port: 9000,
      redis_url: REDIS_URL,
      database_type: DATABASE_TYPE,
      database_url: DATABASE_URL,
      database_logging: DATABASE_LOGGING,
-     http_logging: HTTP_LOGGING
+     http_logging: HTTP_LOGGING,
 }
 
-/** @type {import('./nodejs-package-starter/dist').ConfigModule} */
+/** @type {import('./src/types/globals').ConfigModule} */
 module.exports = {
-    projectConfig
+    projectConfig,
 }

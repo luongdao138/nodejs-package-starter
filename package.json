@@ -1,7 +1,7 @@
 {
-  "name": "nodejs-package-starter",
+  "name": "jvm-backend-project",
   "version": "1.0.0",
-  "description": "This is my favorite starter code for a nodejs npm package",
+  "description": "JVM backend project",
   "main": "dist/index.js",
   "author": "luongdao <luong.dao@pionero.io>",
   "license": "MIT",
