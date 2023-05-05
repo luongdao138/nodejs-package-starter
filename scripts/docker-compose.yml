@@ -11,3 +11,7 @@ services:
     volumes:
       - ./docker_data/postgres:/var/lib/postgresql/data
       - ./docker_data/postgres_sql:/home/postgres_sql
+  redis:
+    image: redis
+    ports:
+      - '6379:6379'
