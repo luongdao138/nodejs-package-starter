@@ -21,3 +21,35 @@ export class User extends BaseEntity {
     this.id = generateEntityId(this.id, 'usr')
   }
 }
+
+/**
+ * @schema user
+ * title: "User"
+ * description: "Represents a User of system."
+ * x-resourceId: user
+ * type: object
+ * required:
+ *   - email
+ *   - username
+ * properties:
+ *   id:
+ *     type: string
+ *     description: The user's ID
+ *     example: usr_01G1G5V26F5TB3GPAPNJ8X1S3V
+ *   email:
+ *     description: "The email of the User"
+ *     type: string
+ *     format: email
+ *   username:
+ *     description: "The username of the User"
+ *     type: string
+ *     format: username
+ *   created_at:
+ *     type: string
+ *     description: "The date with timezone at which the resource was created."
+ *     format: date-time
+ *   updated_at:
+ *     type: string
+ *     description: "The date with timezone at which the resource was updated."
+ *     format: date-time
+ */
