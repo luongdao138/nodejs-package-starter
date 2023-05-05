@@ -17,3 +17,4 @@ docker_data
 # Project
 jvm-config.js
 jvm-client
+**/swagger

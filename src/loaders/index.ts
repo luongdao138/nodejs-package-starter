@@ -19,6 +19,7 @@ import redisLoader from './redis-loader'
 import repositoresLoader from './repositores-loader'
 import loadRequestContext from './request-context'
 import servicesLoader from './services-loader'
+import swaggerLoader from './swagger-loader'
 
 const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<LoaderResult> => {
   const configModule = loadConfig(directory)
@@ -124,6 +125,9 @@ const appLoader = async ({ expressApp, directory }: LoaderConfig): Promise<Loade
   await apiLoader({ container, app: expressApp })
   const apiAct = logger.success(apiActivity, 'API initialized') || {}
   track('API_INIT_COMPLETED', { duration: apiAct.duration })
+
+  // swagger loaders
+  await swaggerLoader(expressApp)
 
   // default loaders
 

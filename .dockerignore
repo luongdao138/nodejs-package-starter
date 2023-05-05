@@ -22,3 +22,5 @@ npm-debug.log.*
 .prettierrc
 Dockerfile
 README.md
+
+**/swagger

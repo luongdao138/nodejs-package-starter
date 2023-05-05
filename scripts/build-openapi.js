@@ -42,6 +42,7 @@ swaggerInline(['./src/models/*.ts', './src/api/middlewares/**/*.ts', './src/api/
 
           // write file
           fs.writeFileSync('./jvm-client/docs/front-spec.json', JSON.stringify(obj, null, 2))
+          fs.writeFileSync('./src/swagger/front-spec.json', JSON.stringify(obj, null, 2))
         }
       })
       .catch((error) => {

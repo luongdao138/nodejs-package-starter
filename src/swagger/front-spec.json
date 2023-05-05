@@ -1,0 +1,56 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "JVM Front API",
+    "description": "API reference for JVM's Front endpoints. All endpoints are prefix with `/api/v1/front`\n"
+  },
+  "paths": {},
+  "servers": [
+    {
+      "url": "http://localhost:9000/api/v1/front",
+      "description": "Development server"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "user": {
+        "title": "User",
+        "description": "Represents a User of system.",
+        "x-resourceId": "user",
+        "type": "object",
+        "required": [
+          "email",
+          "username"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The user's ID",
+            "example": "usr_01G1G5V26F5TB3GPAPNJ8X1S3V"
+          },
+          "email": {
+            "description": "The email of the User",
+            "type": "string",
+            "format": "email"
+          },
+          "username": {
+            "description": "The username of the User",
+            "type": "string",
+            "format": "username"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "The date with timezone at which the resource was created.",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "The date with timezone at which the resource was updated.",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}

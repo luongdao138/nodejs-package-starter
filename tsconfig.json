@@ -21,5 +21,5 @@
     "removeComments": true
   },
   "include": ["./src/**/*", "jwm-config.js"],
-  "exclude": ["./dist/**/*", "node_modules", "jvm-client"]
+  "exclude": ["./dist/**/*", "node_modules", "jvm-client", "./src/swagger"]
 }
