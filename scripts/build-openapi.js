@@ -70,3 +70,52 @@ swaggerInline(['./src/models/*.ts', './src/api/middlewares/**/*.ts', './src/api/
     console.log('Error front gen sdk: ', error)
     process.exit(1)
   })
+
+// admin API JSON format
+swaggerInline(['./src/models/*.ts', './src/api/middlewares/**/*.ts', './src/api/routes/admin/**/*.ts'], {
+  base: './jvm-client/docs/admin-spec-base.yaml',
+  ignore: [],
+  format: '.json',
+})
+  .then((gen) => {
+    const oas = new OAS(gen)
+
+    oas
+      .validate(true)
+      .then(() => {
+        if (!isDryRun) {
+          const obj = JSON.parse(gen)
+
+          // normalize generated oas
+          normalizeOAS(obj)
+
+          // write file
+          fs.writeFileSync('./jvm-client/docs/admin-spec.json', JSON.stringify(obj, null, 2))
+        }
+      })
+      .catch((error) => {
+        console.log('Error admin gen sdk: ', error)
+        process.exit(1)
+      })
+  })
+  .catch((error) => {
+    console.log('Error admin gen sdk: ', error)
+    process.exit(1)
+  })
+
+// admin API yaml format
+swaggerInline(['./src/models/*.ts', './src/api/middlewares/**/*.ts', './src/api/routes/admin/**/*.ts'], {
+  base: './jvm-client/docs/admin-spec-base.yaml',
+  ignore: [],
+  format: '.yaml',
+})
+  .then((gen) => {
+    if (!isDryRun) {
+      // write file
+      fs.writeFileSync('./jvm-client/docs/admin-spec.yaml', gen)
+    }
+  })
+  .catch((error) => {
+    console.log('Error admin gen sdk: ', error)
+    process.exit(1)
+  })

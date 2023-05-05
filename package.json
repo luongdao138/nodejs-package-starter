@@ -79,6 +79,7 @@
     "migration:run": "node dist/cli/migrate.js run",
     "migration:create": "typeorm migration:create",
     "openapi:sdk:front": "openapi -i ./jvm-client/docs/front-spec.json -o ./jvm-client/front -c axios --useOptions --exportSchemas true --indent 2 --request ./jvm-client/request/index.ts",
-    "client:generate": "node ./scripts/build-openapi.js && yarn openapi:sdk:front"
+    "openapi:sdk:admin": "openapi -i ./jvm-client/docs/admin-spec.json -o ./jvm-client/admin -c axios --useOptions --exportSchemas true --indent 2 --request ./jvm-client/request/index.ts",
+    "client:generate": "node ./scripts/build-openapi.js && yarn openapi:sdk:front && yarn openapi:sdk:admin"
   }
 }
