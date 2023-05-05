@@ -5,7 +5,45 @@
     "title": "JVM Front API",
     "description": "API reference for JVM's Front endpoints. All endpoints are prefix with `/api/v1/front`\n"
   },
-  "paths": {},
+  "paths": {
+    "/users": {
+      "get": {
+        "operationId": "GetUsers",
+        "summary": "Get list user demo",
+        "description": "Get list user demo",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Name of user",
+                        "example": "John Doe"
+                      },
+                      "age": {
+                        "type": "string",
+                        "description": "Age of user",
+                        "example": 24
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "servers": [
     {
       "url": "http://localhost:9000/api/v1/front",

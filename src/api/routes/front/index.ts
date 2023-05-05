@@ -4,6 +4,7 @@ import { Router } from 'express'
 import { ConfigModule } from '../../../types'
 import { AppContainer } from '../../../utils'
 import { parseCorsOrigin } from '../../../utils/parse-cors-origin'
+import initUserRoutes from './user'
 
 const frontRoute = Router()
 
@@ -19,6 +20,7 @@ export default function (masterRoute: Router, container: AppContainer, config: C
   )
 
   // init all children route belongs to front side
+  initUserRoutes(frontRoute) // demo purpose
 
   masterRoute.use('/front', frontRoute)
 
