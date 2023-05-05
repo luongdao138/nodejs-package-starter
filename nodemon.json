@@ -2,7 +2,7 @@
   "watch": ["src"],
   "ext": "ts,js,tsx,jsx",
   "ignore": ["node_modules", "dist", "coverage", "**/*.test.ts", "**/*.test.js", "**/*.spec.ts", "**/*.spec.js"],
-  "exec": "npm run build && npm run serve",
+  "exec": "npm run serve",
   "restartable": "rs",
   "env": {
     "NODE_ENV": "development"
