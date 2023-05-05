@@ -1,6 +1,6 @@
 .git
 .vscode
-client-sdk
+jvm-client
 coverage
 docker_data
 dist

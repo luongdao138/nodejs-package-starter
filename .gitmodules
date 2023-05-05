@@ -1,0 +1,3 @@
+[submodule "jvm-client"]
+	path = jvm-client
+	url = https://github.com/luongdao138/jvm-client.git
